@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #111;
+  --fg: #ddd;
+  --accent: #888;
+  --hover: #fff;
+  --tab-bg: #222;
+  --tab-active: #333;
+  --overlay-bg: rgba(0,0,0,0.92);
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+}
+
+header {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #222;
+  flex-wrap: wrap;
+}
+
+header a {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.15s;
+}
+
+header a:hover, header a.active {
+  color: var(--hover);
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page { display: none; }
+.page.visible { display: block; }
+
+/* Home */
+.home-placeholder {
+  color: var(--accent);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 600px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #333;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab-btn:hover { color: var(--hover); }
+.tab-btn.active {
+  color: var(--hover);
+  border-bottom-color: var(--hover);
+}
+
+.tab-panel { display: none; }
+.tab-panel.visible { display: block; }
+
+/* Video grid */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.video-card {
+  cursor: pointer;
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #1a1a1a;
+  transition: transform 0.15s;
+}
+
+.video-card:hover { transform: scale(1.02); }
+
+.video-card img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+
+.video-card .label {
+  padding: 0.5rem 0.7rem;
+  font-size: 0.85rem;
+  color: var(--fg);
+}
+
+.video-card.placeholder-card {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.video-card.placeholder-card:hover { transform: none; }
+
+.video-card.placeholder-card img {
+  filter: brightness(0.4);
+}
+
+/* Video overlay */
+.video-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--overlay-bg);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-overlay.visible {
+  display: flex;
+}
+
+.video-overlay iframe {
+  width: min(90vw, 960px);
+  aspect-ratio: 16/9;
+  border: none;
+  border-radius: 8px;
+}
+
+.video-overlay .close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.video-overlay .close-btn:hover { color: #fff; }
+
+/* Game design */
+.game-section h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.game-section p {
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+  line-height: 1.6;
+}
+
+.game-section a {
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px solid #444;
+  transition: border-color 0.15s;
+}
+
+.game-section a:hover { border-color: var(--hover); }
+
+.game-section .team {
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.game-section .team-member {
+  margin-bottom: 0.3rem;
+}
+
+.game-section .team-member a {
+  margin-left: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+/* Poetry */
+.poem-viewer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.poem-text {
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+  line-height: 1.7;
+  font-size: 1rem;
+  max-width: 600px;
+  width: 100%;
+  min-height: 200px;
+}
+
+.poem-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  user-select: none;
+}
+
+.poem-nav button {
+  background: none;
+  border: 1px solid #444;
+  color: var(--fg);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.poem-nav button:hover {
+  border-color: var(--hover);
+  color: var(--hover);
+}
+
+.poem-counter {
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.poem-collection-title {
+  color: var(--accent);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Section description */
+.section-desc {
+  color: var(--accent);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  header { padding: 1rem; gap: 1rem; }
+  main { padding: 1rem; }
+  .video-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="#home" class="nav-link active">home</a>
+  <a href="#trackmania" class="nav-link">trackmania level design</a>
+  <a href="#osu" class="nav-link">osu! level design</a>
+  <a href="#gamedesign" class="nav-link">game design</a>
+  <a href="#poetry" class="nav-link">poetry</a>
+</header>
+
+<main>
+  <!-- Home -->
+  <div class="page visible" id="page-home">
+    <div class="home-placeholder">
+      <p>hi! my name is Linus Wegge Hjalsted</p>
+      <p>I am an up-and-coming game designer with an expertise in level design</p>
+      <p>flow and cohesion are core design principles of mine</p>
+      <p>I thrive in experimentation and iteration of ideas</p>
+    </div>
+  </div>
+
+  <!-- Trackmania -->
+  <div class="page" id="page-trackmania">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="tm-totd">Track Of The Day</button>
+      <button class="tab-btn" data-tab="tm-kacky">Kacky Reloaded</button>
+    </div>
+
+    <div class="tab-panel visible" id="tm-totd">
+      <p class="section-desc">Trackmania 2020's official daily track with competitions and hunting</p>
+      <div class="video-grid" id="grid-tm-totd"></div>
+    </div>
+
+    <div class="tab-panel" id="tm-kacky">
+      <p class="section-desc">A well-loved community competition on hard and wicked maps exploiting obscure mechanics</p>
+      <div class="video-grid" id="grid-tm-kacky"></div>
+    </div>
+  </div>
+
+  <!-- osu! -->
+  <div class="page" id="page-osu">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="osu-loved">Loved beatmap sets</button>
+      <button class="tab-btn" data-tab="osu-ranked">Ranked beatmap sets</button>
+    </div>
+
+    <div class="tab-panel visible" id="osu-loved">
+      <div class="video-grid" id="grid-osu-loved"></div>
+    </div>
+
+    <div class="tab-panel" id="osu-ranked">
+      <div class="video-grid" id="grid-osu-ranked"></div>
+    </div>
+  </div>
+
+  <!-- Game Design -->
+  <div class="page" id="page-gamedesign">
+    <div class="game-section">
+      <h2>taplop</h2>
+      <p>Turn-based grid-based RPG designed for level creators and speedrunners (prototype)</p>
+      <p>
+        <a href="https://linusweggehjalsted.github.io/taplop/" target="_blank">play in browser</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://github.com/LinusWeggeHjalsted/taplop" target="_blank">source (Unity)</a>
+      </p>
+      <p style="margin-top: 0.6rem;">Currently being rewritten in Zig without a game engine:
+        <a href="https://git.sr.ht/~narkokran/ziglop/tree" target="_blank">ziglop</a>
+      </p>
+
+      <div class="team">
+        <p style="color: var(--fg); font-size: 0.9rem; margin-bottom: 0.4rem;">Team:</p>
+        <div class="team-member">Linus &mdash; game director, game design, UI/UX design, level design, programming</div>
+        <div class="team-member">Cille &mdash; art director, graphics, world building
+          <a href="https://penzilla.itch.io/" target="_blank">itch.io</a>
+        </div>
+        <div class="team-member">Victor &mdash; sound director, soundtrack, sound effects
+          <a href="https://www.glitch.cool/jim-kimchi" target="_blank">glitch.cool</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Poetry -->
+  <div class="page" id="page-poetry">
+    <p class="poem-collection-title">panorama &mdash; Danish poetry collection of rhythmic and surreal language capturing a panorama of atmospheric settings</p>
+    <div class="poem-viewer">
+      <div class="poem-nav">
+        <button id="poem-prev" aria-label="Previous poem">&#8249;</button>
+        <span class="poem-counter" id="poem-counter"></span>
+        <button id="poem-next" aria-label="Next poem">&#8250;</button>
+      </div>
+      <div class="poem-text" id="poem-text"></div>
+    </div>
+  </div>
+</main>
+
+<!-- Video overlay -->
+<div class="video-overlay" id="video-overlay">
+  <button class="close-btn" id="overlay-close">&times;</button>
+  <iframe id="overlay-iframe" allowfullscreen allow="autoplay"></iframe>
+</div>
+
+<script>
+// --- Data ---
+
+const tmTotd = [
+  { title: "linex (2026-02-28)", videoId: "AwPHn2_khdA" },
+  { title: "Kacky of the Day #4 (2025-11-01)", videoId: "bGIX3hh-uqc" },
+  { title: "crimson spires ft MrPepsy (2025-04-03)", videoId: "ClR_l8QyHpQ" },
+  { title: "culmination (2024-02-02)", videoId: "itX8bVIQFUg" },
+  { title: "bevel (2023-08-09)", videoId: "_lEvykZhDxg" },
+  { title: "the evokers (2023-05-04)", videoId: "WNx7ECViEH8" },
+  { title: "gyrtex (2023-03-30)", videoId: "Pw0mKrya2lA" },
+];
+
+const tmKacky = [
+  { title: "Kacky Reloaded #434", videoId: "DZMMiGvdp8A" },
+  { title: "Kacky Reloaded #429", videoId: "OyL24YOpvww" },
+  { title: "Kacky Reloaded #423", videoId: "NXV-aNn7g8o" },
+  { title: "Kacky Reloaded #380", videoId: "diwP418IiQE" },
+  { title: "Kacky Reloaded #373", videoId: "qWxB4ufqmLQ" },
+  { title: "Kacky Reloaded #335", videoId: "2uUF1q_Q0PU" },
+  { title: "Kacky Reloaded #326", videoId: "kOuMsjseaZY" },
+  { title: "Kacky Reloaded #307", videoId: "zUnJ88UkoIw" },
+];
+
+const osuLoved = [
+  { title: "Nyarons - After The Rain", videoId: null },
+];
+
+const osuRanked = [
+  { title: "Imagine Dragons - Believer", videoId: null },
+  { title: "Clarence Clarity - Those Who Can't, Cheat", videoId: null },
+  { title: "Sylvan Esso - Radio (Demo Taped Remix)", videoId: null },
+  { title: 'Rob Cantor - "SHIA LABEOUF" LIVE', videoId: null },
+  { title: "Wednesday Campanella - The Bamboo Princess", videoId: null },
+  { title: "Chima - urar", videoId: null },
+  { title: "twiddy - The Birds", videoId: null },
+  { title: "Kendrick Lamar - King Kunta", videoId: null },
+  { title: "Wednesday Campanella - Melos", videoId: null },
+  { title: "Wednesday Campanella - Zeami", videoId: null },
+];
+
+const poems = [
+  "klaptajn ko\nmed træsko og læderben\næder kindsten fra skørbugtens skur\nkystlandets kæft\nglat glider hagen i takt med et mundsprog\nen slags sniksnak om fyrkanten fjern\ngult jern under dynen\nen kanonbold i trynen fra en flagnabo\nklodsmatros stakker kasteskyts i mastpyttens spyt\nblokmajor planker pladask\nen knage i gabet og en snabel i skabet\narmbøjlens vældige blink\nglemt er glimtet ved verdens kant\nhvor vandsmerten vandt",
+  "sirkum stang\nsynger svar om sin skæbne\nbevæbnet med visdom om vilkår\nnår det hele det er hvad det er\nman gynger i svinget\nfrem med et fløjt\ntilbage på dagene drøje og dunkle\nviljer en tomlommes vinter\nog somre på lyshåndens tromme\nhvor gribber en stråle\nfra solpostens kistende krop\nhudbrændt og sengelagt\nudkulden indebagt",
+  "alting pumper\ntryk der pulser multitonalt\nlokalmanifesteret kosmisk kvalme\nprojiceret fra helhedens samling\nopnår komfort ved sådan approksimat\npå tilbølgernes bindende spids\noptimum begravet øverst under topbund\ni sus fra steder til tider\npunktummets tvivl\nog floder flyder efter tanken om bæk\nsmider lys på tildækket tavle\nmed hvirvler i splittelsens udsyn\nog vandfaldene bruser\nverden oser",
+  "tungen forvredet\nhvor fredens fanfare er tavs\nmuskler en knude i struben\nastmatisk en sfælgets svulst\npolemisk bronkitis\nlungen der imploderer\nunder tyngende tryk\npigtråden gisper sin gæst\ni gas og asbest",
+  "ordets impuls\nbevaret tumult i bemærkning\nlufttryk bevæges besked\nbølgepost breder et budskab\nhensigt fortabt i fortolkningens flade\nnet fanger billed behandlet\nudbygger sprogrum\nbeskriver den sammenhæng som siges\nhvordan lige er linjen der binder\nnår man finder funktionen\nfoldet dimension af forstand\ni tonen mellem tand",
+  "der svovles\nen gøen om kap\nænder kan fandeme larme\narm gane med vers der drypper af spyt\nhængt ud til tørre\net pust svinger sveden af sig\npruster sit savlende mundsprøjt\nder er højt til toppen\nskydobbelt dækket forstand\nover en tyk atmosfære\nsolvind i sejlet\npur strøm af ord til ovn\nlynild en lyrikers hjemmebrød bagt\npragmatiske udsagn bragt",
+  "velkommen til vibratoriet\nsignaler på dåse\nsæt en stemning på hylden\nog byt for et nyt lyt\nfri og kollektiv adgang\ntil et kartotek af larm og harmoni\nbare fordi man vil\nthi viljens vildhed har potens\nhungrende poter på human hang\ntrangen til sansestimulans\nrytmisk hop svinger danseglans galop\nmelodisk intenst i top",
+  "mølmøgets kluk\nstøgfnug på planernes flader\nsender støv på friskrevet luft\nfingrene strukket\ntrækker et spor\nnegle skingre mod skidstskiffers gitter\ngennem tyklaget krudtløv og bark\nsom det sparker på pulsen\nog gulner det gyldnede gys\nen kakofoni løber lys",
+  "høj fidelitet\ndet er ganske lavpraktisk\nstrøm i en ledning\nder godt lubrikeret kan sno sig\ndataen gror\nhurtigt magnetspiret kreds\nny information signalleres konstant\nstrukket langt over luft\nspolbart fejlfundet håndtryk\nrykker spørgsmål til udregning\nkomprimerer en tegnings struktur\nbevarer detaljen så pur",
+  "kabel kaput\nkapitulerer når ansat i ild\nantikontrol kontra krydstjek\ngnist i en gnidning\nlast i en lednings kapacitet\nisoleringens revne\nopsluppet modstand ved slid\nmodnet model moderniseres\nnår tavlen igen monteres",
+  "suset fra damsluse\nbrølende bygers bane\nhyrder kanalen bag bølgehegn\norkan ortogonal mod facadens facon\nstålfast beton er stormflods stop\nstenbundet dybt ned med hammerkran\nhydroresistance en ret disciplin\ntak til polyteknikant\ningeniørens triumf\nbassin oxideres i livlighed\nfæstningen frigiver tørskygget dal\nman landet fra vandmassen stjal",
+  "verdens vrede\ntyfoner orkaner og slud på en synddag\nsynker en grønløs giftgrav\ngrundvandet syrnet af skyernes gråd\nlerbunden skrider\nskråningen skriger sit mudder som savl\nlandet belastet lavine\nsteppebrand trodser den druknende storm\nthi ildheden viser sin form",
+  "totempøl\nsprængvandets ritual\nspiret gennem pløre og dis\nsulfur spektakel\ngulsurt fornemmet metan\ndampstedet søjler sin gas\ntryk kulmineret skift\nskorpens ånde\nunder skalpens skjold\nskoldhede sten funderet på fortid\nopfyret ovn planetær\nildkuglen altid nær",
+  "trængt terræn\ntætklinget svulmer skyportens øje\nsort at fornøje for svimlens tinding\ndet går langsomt\nmed en fod en fod begravet\net skridt fra afgrundens gru\ndet er hårdt\nmed en håndsbreddes udsyn for hånden\nnår ånden den splintrer\nog stenmaren stejler\nbjergbukken bugner og hiver\nså sikker på solskinnet afskjulet snart\net ståsted så luftløst og bart",
+  "ornitologens kompas\npeger mod sagnbundne vinger\nud i ukendt mystik\nsjælden skæbnes sjælebyrd\npejlet ind på en uplejet verden\nper association snarere end sandhed\ndet vilde fortolket illustrativt\nmed visdom i lommebogs streger\ntapetet af flora floreret\ntelt i tasken\nasken fra bålet der gav lys\ndet er snart morgen\nog mytens næb kommer frem\ner den farlig er den tam",
+  "ørred relakset\nskal tørsten sig slukke\ntil tid trukket trods på en strømning\nfisken kan se mange meter\nlanger ud på en bækbruset bid\ndet er daggry\nstilfrydens frisksmurte brise\nmed hvislende vildblomsters blade\nder dypper i glasvandets glo\ningen to har her stået\nforgået en vandrer fortabt\net udsnit så knapt",
+  "brisen bjælder\nmed fløjter fra blomsten\nher står lykkens bi\nstinker fra foråret den saftige dunst\nhilser til liljekontrollen\npå skærpet lundfront\nderude blandt de skovsure birkebuer\npastellens idyl i lysbombardement\nnår sommerlyn klynger migræne\neftergår kvalmen forsvundet\ntrækronedrys giver genglød\nen bog er en bøgenød",
+  "skovlridder saks\nbusk om en brosti\ngrus mellem græsplæne\nhækken vil gro\ntilklippet kæp med frisure\npælestik pløk for en spire forslynget\nstikling bebundet support\nen potteparade bag glasgardin\nplads til familiær eksotik\nnæret i planlagt rutine\nvandingsanlæg med autosprøjt\nlyder et gartnerfløjt",
+  "skærkrog\ngræskarets grin\nskyder skarpt efter gråkrigens krager\nefter klager om skrappen\nkom botkappen på skaftet\nmed mikrokontrol under armhulen\nkoblet til tungtladte rifler\nautoidentificerer luftdyrets rute\nhimler de fjerklædte øjne til jords\ngjort en gødning knapt forgæves\nkuldragtet suppedrop\ntil skedriver kniv og karaffel\nhøjlanders højtkalibrerede teknoslæb\nskybøjders styrtende næb",
+  "ravneryg\nen sort kats skygge\nlygternes tårer ved midnat\ndamper den dunkle sumpstump\net gnæg kondenseret\nhektisk ihærdig kemi\nfylder hele hytten i farvebrand\ndruer og blommer og fersk fantom\nnår synsmelodi smager ukrudt\nbryggen brister forstand\næterflakon\nmed umulig facon og falske facetter\nslurken en skæbnestråd fletter",
+  "koens pose\nbredbundet og blodtrukket\ni kø til det gale rige\nhjerneporer pelset i svampede synapser\nefter hang til fodret selvspise\nutvivlet tvang\ngenetisk gældviser ramte sig midnat\ntil gravgårdens skilte med sindsdød\nmodner en form for fortolkning\nog vidner et væsens kollaps\nkan læderet mon stadig poleres\nnu når kødet er helt afsindigt giftigt\nulivlig taske på hoften\nkøbmagers koften",
+  "fiskefister\npå søanemonekontoret\nfirma for sandpyttens samfund\nstøvdyne at slumre i\ngemt fra frådens frygt\ntrygt under kamo montage\nkoral spiral en hulesnegl nabo\nmed eget køkken og marked lokalt\nfrisk algesalat i spande\nman træder vande",
+  "spejderkop\ni spindhjørnet køje\nmed samtlige øjne på fangsten\nfælden et stankelt benspænd\nsnubler i jubel\nslynger en mave punkteret\nmed sving synkoperet symptom\nvalset triol med fem venstre knæ\nfra højere i hegnet\nhvor spidbror slog sig ned\ngedebid og svaleflirt\nen farlig slagmark at stå op til\nbundhoppet synes at være fornuftigt\nher er mad og mindre luftigt",
+  "kagen formandlet\nkerner i nød\nder knitrer en knas mellem dejen\næltet i kantbøjet drejning\nsmåmolekulært i model\nsom giver en strækningspotens\nkrosantisme\net studie i smørlag\npå en fridag",
+  "sneslinger\nden slynglede slalom\nfodplanker pløjer sit snit\nog knokler på puklet parabel\npå udkig med skopet mod bakkens bastarder\nnordnakkens næste\ntil ophop og snotsnyders tumlen\nmomentum med luften en målløs mundfuld\nplanetdrejer fanger tangenten\nforløst forventen",
+  "banebryder\nen unicyklette\nder skælver et sandsplittet spor\nlad kløften fortælle forbi\nfordi den forreste fronten\nfinter i støvet\nbrølet fra løven i bur\nen jordnyder stirret sitrer i sædet\nduren er målløs melodisk\nbløder triumf\nandagten afsætter stemplet\nsøjle i templet",
+  "læbebælg\nnymfens knuder\nnatliljer opknoppes i virvarets dans\nsmider sig frem\nvi var gnidningen skyldig\nsom den udgrenet vrides til livs\nmundskubber bid mig\nmed hænder bebrejdet\nflet smitten en pisk at slå stjerner\nden våde knold smælder knyt\nvover en sygdoms byt",
+  "mønt\nkøjn på højkant\nkig kortet dybt i hjertet\nknoens klø isner\nspar bare op\ndug kondenseres på ruden\nde pulsende åndedræt\nflygtig frost i øjet\nkoldneglet spil\nopgejlet pres til fortabelse\nrundgangen efterabet stramt\nrebet snører ind\nlykken blind",
+  "tyvens kompleks\nsom kleptisk mani springer ud\ngenstand for langfingers tvang\ntingens magnetisme\npå hylder i paphylstret omslag\nkun et håndtag fra frakken\nden fine linje mellem angst og ekstase\nforbudets rus\nsnupper en suppekarton\net rugbrød og to liter mælk\nsæbe med æblearoma\nlommer fyldt store af ukøb\nspæner en spændings afløb",
+  "ad opulent korpum\ntvivl til en vinsæk\nlædret et finformet væsel\npose pompøs i spyt bespottet\nsludret besudlen af sandhed\nkontrol er en kølle\nklemt i et udfingret greb\nen slyngel for meget\nnødvendigt at fordreje i spydlys\nsom svindles her til bys",
+  "fucking færdselsbetændt\nfortjener man kantsten i nakken\nkæden knækket en kæp i kørslen\nlygter forlagt og forsvundet\nud på afsaltet asfalt\nfortovets fliseværk nedtrådt\nad smutvejens smuglede smirk\nen snebirk og blodbøg bag bager\ntre birkes blev solgt til en hund\nslud på menuen\ntilskorpet kropssport\nnu er det hjem og forkastet\nnæsten hver dag forhastet",
+  "tjærens tjans\njernfjerens rullede hjul\ncylindrisk og uhindret retning\nafglatter pålægningspanser\nlidt stikket i varmen\nen sten kastet hårdt sidder fast\nsår under stok og balast",
+  "skrald i en spandbrand\nplastik der smelter et uvejr\nregn sprutter dråber af ild\nolier et vandspejl\npytflammens små baljer napalm\ngumler den sydende gummi\nmumler hidsigt\nudsmidt et engangskrus\nopkrøllet krydsord fra forrige uge\naske og blæk\ngættede bogstaver ristet i røgsøjlen\nløgne i sandhed forkullet\nhvidgløden ovner en skorstens bål\nrødmer selv stiveste stål",
+];
+
+// --- Helpers ---
+
+function ytThumb(videoId) {
+  return `https://img.youtube.com/vi/${videoId}/sddefault.jpg`;
+}
+
+function renderGrid(containerId, items) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = items.map(item => {
+    if (item.videoId) {
+      return `<div class="video-card" data-video-id="${item.videoId}">
+        <img src="${ytThumb(item.videoId)}" alt="${item.title}" loading="lazy">
+        <div class="label">${item.title}</div>
+      </div>`;
+    } else {
+      return `<div class="video-card placeholder-card">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 180'%3E%3Crect fill='%23222' width='320' height='180'/%3E%3Ctext x='160' y='95' text-anchor='middle' fill='%23555' font-size='14'%3Evideo coming soon%3C/text%3E%3C/svg%3E" alt="${item.title}">
+        <div class="label">${item.title}</div>
+      </div>`;
+    }
+  }).join('');
+}
+
+// --- Init grids ---
+renderGrid('grid-tm-totd', tmTotd);
+renderGrid('grid-tm-kacky', tmKacky);
+renderGrid('grid-osu-loved', osuLoved);
+renderGrid('grid-osu-ranked', osuRanked);
+
+// --- Navigation ---
+function navigate(hash) {
+  const page = hash.replace('#', '') || 'home';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('visible'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('visible');
+
+  document.querySelectorAll('.nav-link').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + page);
+  });
+}
+
+window.addEventListener('hashchange', () => navigate(location.hash));
+navigate(location.hash || '#home');
+
+// --- Tabs ---
+document.querySelectorAll('.tabs').forEach(tabBar => {
+  tabBar.addEventListener('click', e => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    tabBar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const page = tabBar.closest('.page');
+    page.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('visible'));
+    document.getElementById(btn.dataset.tab).classList.add('visible');
+  });
+});
+
+// --- Video overlay ---
+const overlay = document.getElementById('video-overlay');
+const overlayIframe = document.getElementById('overlay-iframe');
+
+document.addEventListener('click', e => {
+  const card = e.target.closest('.video-card:not(.placeholder-card)');
+  if (!card) return;
+  const videoId = card.dataset.videoId;
+  if (!videoId) return;
+  overlayIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+  overlay.classList.add('visible');
+});
+
+function closeOverlay() {
+  overlay.classList.remove('visible');
+  overlayIframe.src = '';
+}
+
+document.getElementById('overlay-close').addEventListener('click', closeOverlay);
+overlay.addEventListener('click', e => {
+  if (e.target === overlay) closeOverlay();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeOverlay();
+});
+
+// --- Poetry ---
+let poemIndex = 0;
+const poemText = document.getElementById('poem-text');
+const poemCounter = document.getElementById('poem-counter');
+
+function showPoem(i) {
+  poemIndex = i;
+  poemText.textContent = poems[i];
+  poemCounter.textContent = `${i + 1} / ${poems.length}`;
+}
+
+document.getElementById('poem-prev').addEventListener('click', () => {
+  showPoem((poemIndex - 1 + poems.length) % poems.length);
+});
+document.getElementById('poem-next').addEventListener('click', () => {
+  showPoem((poemIndex + 1) % poems.length);
+});
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('page-poetry').classList.contains('visible')) return;
+  if (e.key === 'ArrowLeft') showPoem((poemIndex - 1 + poems.length) % poems.length);
+  if (e.key === 'ArrowRight') showPoem((poemIndex + 1) % poems.length);
+});
+
+showPoem(0);
+</script>
+
+</body>
+</html>
