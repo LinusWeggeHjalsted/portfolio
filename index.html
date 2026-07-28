@@ -318,16 +318,18 @@ main {
   <!-- osu! -->
   <div class="page" id="page-osu">
     <div class="tabs">
-      <button class="tab-btn active" data-tab="osu-loved">Loved beatmap sets</button>
-      <button class="tab-btn" data-tab="osu-ranked">Ranked beatmap sets</button>
+      <button class="tab-btn active" data-tab="osu-ranked">Ranked beatmap sets</button>
+      <button class="tab-btn" data-tab="osu-loved">Loved beatmap sets</button>
     </div>
 
-    <div class="tab-panel visible" id="osu-loved">
-      <div class="video-grid" id="grid-osu-loved"></div>
-    </div>
-
-    <div class="tab-panel" id="osu-ranked">
+    <div class="tab-panel visible" id="osu-ranked">
+      <p class="section-desc">Beatmap sets given official leaderboards after comprehensive quality control according to the game's ranking criteria</p>
       <div class="video-grid" id="grid-osu-ranked"></div>
+    </div>
+
+    <div class="tab-panel" id="osu-loved">
+      <p class="section-desc">Beatmap sets given official leaderboards as a result of community choice</p>
+      <div class="video-grid" id="grid-osu-loved"></div>
     </div>
   </div>
 
@@ -347,11 +349,11 @@ main {
 
       <div class="team">
         <p style="color: var(--fg); font-size: 0.9rem; margin-bottom: 0.4rem;">Team:</p>
-        <div class="team-member">Linus &mdash; game director, game design, UI/UX design, level design, programming</div>
-        <div class="team-member">Cille &mdash; art director, graphics, world building
+        <div class="team-member">Linus - game director, game design, UI/UX design, level design, programming</div>
+        <div class="team-member">Cille - art director, graphics, world building
           <a href="https://penzilla.itch.io/" target="_blank">itch.io</a>
         </div>
-        <div class="team-member">Victor &mdash; sound director, soundtrack, sound effects
+        <div class="team-member">Victor - sound director, soundtrack, sound effects
           <a href="https://www.glitch.cool/jim-kimchi" target="_blank">glitch.cool</a>
         </div>
       </div>
@@ -360,7 +362,7 @@ main {
 
   <!-- Poetry -->
   <div class="page" id="page-poetry">
-    <p class="poem-collection-title">panorama &mdash; Danish poetry collection of rhythmic and surreal language capturing a panorama of atmospheric settings</p>
+    <p class="poem-collection-title">panorama - Danish poetry collection of rhythmic and surreal language capturing a panorama of atmospheric settings</p>
     <div class="poem-viewer">
       <div class="poem-nav">
         <button id="poem-prev" aria-label="Previous poem">&#8249;</button>
@@ -402,21 +404,21 @@ const tmKacky = [
   { title: "Kacky Reloaded #307", videoId: "zUnJ88UkoIw" },
 ];
 
-const osuLoved = [
-  { title: "Nyarons - After The Rain", videoId: null },
+const osuRanked = [
+  { title: "Imagine Dragons - Believer", videoId: "Z8YLPc2IFhM" },
+  { title: "Clarence Clarity - Those Who Can't, Cheat", videoId: "9TyNcjvno9Q" },
+  { title: "Sylvan Esso - Radio (Demo Taped Remix)", videoId: "KIrmhp97PCw" },
+  { title: 'Rob Cantor - "SHIA LABEOUF" LIVE', videoId: "SgjMNxBd--4" },
+  { title: "Wednesday Campanella - The Bamboo Princess", videoId: "26LuN6heObA" },
+  { title: "Chima - urar", videoId: "QTlYIA_OAEI" },
+  { title: "twiddy - The Birds", videoId: "4lrhxPxnsPA" },
+  { title: "Kendrick Lamar - King Kunta", videoId: "ehqBCMbLVhg" },
+  { title: "Wednesday Campanella - Melos", videoId: "BC-WGPORCSM" },
+  { title: "Wednesday Campanella - Zeami", videoId: "0hai5gOY7s8" },
 ];
 
-const osuRanked = [
-  { title: "Imagine Dragons - Believer", videoId: null },
-  { title: "Clarence Clarity - Those Who Can't, Cheat", videoId: null },
-  { title: "Sylvan Esso - Radio (Demo Taped Remix)", videoId: null },
-  { title: 'Rob Cantor - "SHIA LABEOUF" LIVE', videoId: null },
-  { title: "Wednesday Campanella - The Bamboo Princess", videoId: null },
-  { title: "Chima - urar", videoId: null },
-  { title: "twiddy - The Birds", videoId: null },
-  { title: "Kendrick Lamar - King Kunta", videoId: null },
-  { title: "Wednesday Campanella - Melos", videoId: null },
-  { title: "Wednesday Campanella - Zeami", videoId: null },
+const osuLoved = [
+  { title: "Nyarons - After The Rain", videoId: "nIgrmdzj100" },
 ];
 
 const poems = [
@@ -481,8 +483,8 @@ function renderGrid(containerId, items) {
 // --- Init grids ---
 renderGrid('grid-tm-totd', tmTotd);
 renderGrid('grid-tm-kacky', tmKacky);
-renderGrid('grid-osu-loved', osuLoved);
 renderGrid('grid-osu-ranked', osuRanked);
+renderGrid('grid-osu-loved', osuLoved);
 
 // --- Navigation ---
 function navigate(hash) {
