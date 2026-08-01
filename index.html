@@ -283,6 +283,7 @@ main {
   <a href="#trackmania" class="nav-link">trackmania level design</a>
   <a href="#osu" class="nav-link">osu! level design</a>
   <a href="#gamedesign" class="nav-link">game design</a>
+  <a href="#sudoku" class="nav-link">sudoku</a>
   <a href="#poetry" class="nav-link">poetry</a>
 </header>
 
@@ -360,6 +361,12 @@ main {
     </div>
   </div>
 
+  <!-- Sudoku -->
+  <div class="page" id="page-sudoku">
+    <p class="section-desc">Variant sudoku puzzles featured on Cracking The Cryptic</p>
+    <div class="video-grid" id="grid-sudoku"></div>
+  </div>
+
   <!-- Poetry -->
   <div class="page" id="page-poetry">
     <p class="poem-collection-title">panorama - Danish poetry collection of rhythmic and surreal language capturing a panorama of atmospheric settings</p>
@@ -419,6 +426,11 @@ const osuRanked = [
 
 const osuLoved = [
   { title: "Nyarons - After The Rain", videoId: "nIgrmdzj100" },
+];
+
+const sudoku = [
+  { title: "flowers", videoId: "S_m-YCyOsEc" },
+  { title: "donut", videoId: "SnwRz5JE0ho" },
 ];
 
 const poems = [
@@ -485,6 +497,7 @@ renderGrid('grid-tm-totd', tmTotd);
 renderGrid('grid-tm-kacky', tmKacky);
 renderGrid('grid-osu-ranked', osuRanked);
 renderGrid('grid-osu-loved', osuLoved);
+renderGrid('grid-sudoku', sudoku);
 
 // --- Navigation ---
 function navigate(hash) {
